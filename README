@@ -1,0 +1,7 @@
+In order for program to work, you need 
+    AthenaMainFile.py
+    sbert_model.pkl
+    nn_model.pkl
+    chatbot_data.pkl
+
+The Other Files are not needed for RUNNING the program, only setting it up/training
