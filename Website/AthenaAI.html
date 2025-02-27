@@ -65,59 +65,47 @@
                                     return;
                                 }
                             }
-                    
-                            let usertext = document.querySelector('#userText').value;
-                            
-                            // Toggle grammar check
-                            // Toggle grammar check
-                            // Toggle grammar check
-                            let checkGrammarBool = false;
-                            // Toggle grammar check
-                            // Toggle grammar check
-                            // Toggle grammar check
-                    
-                            // Grammar Check Functionality (Runs Separately)
-                            async function handleGrammarCheck() {
-                                if (!usertext.trim()) {
-                                    alert("Please enter some text.");
-                                    return;
-                                }
-                    
-                                document.getElementById("results").innerHTML = "---Checking Grammar---";
-                    
-                                try {
-                                    const { correctedMessage, explanation } = await checkGrammar(usertext);
-                                    document.getElementById("results").innerHTML = correctedMessage + "<br>" + explanation;
-                                } catch (error) {
-                                    console.error("Grammar check error:", error);
-                                    document.getElementById("results").innerHTML = "Error in grammar check." + error;
-                                }
-                            }
-                    
-                            if (checkGrammarBool) {
-                                handleGrammarCheck();
-                                return; // STOP HERE! No chatbot if grammar check is active.
-                            }
-                    
+
+                            let usertext = document.querySelector('#userText').value; // Assuming #userText is the correct ID for your input field
+
                             // --- Chatbot Functionality ---
                             document.getElementById("results").innerHTML = "---Loading AI Response---";
-                    
-                            function onFulfilled(response) { 
-                                document.getElementById("results").innerHTML = response;
+
+                            // Function to handle the chatbot response when fulfilled
+                            function onFulfilled(response) {
+                                document.getElementById("results").innerHTML = response.reply; // Assuming the response object has a 'reply' property
                             }
-                    
-                            function onRejected(response) { 
+
+                            // Function to handle errors in chatbot response
+                            function onRejected(error) {
                                 if (!puter.auth.isSignedIn()) {
-                                    document.getElementById("results").innerHTML = "Error-Request.Failed:Account Error";
+                                    document.getElementById("results").innerHTML = "Error-Request.Failed: Account Error";
                                     puter.auth.signIn();
                                 } else {
-                                    document.getElementById("results").innerHTML = "Error-Request.Failed:Error has occurred";
+                                    document.getElementById("results").innerHTML = "Error-Request.Failed: Error has occurred";
                                 }
                             }
-                    
-                            // Run chatbot request with ORIGINAL user input (uncorrected text)
-                            puter.ai.chat(usertext).then(onFulfilled, onRejected);
+
+                            // Function to handle sending the message (and receiving the response)
+                            function sendMessage() {
+                                let userText = document.getElementById("userText").value; // Use the correct ID for the text area input
+
+                                fetch("http://localhost:5000/chatbot", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify({ message: userText })
+                                })
+                                .then(response => response.json())
+                                .then(onFulfilled) // Handle response
+                                .catch(onRejected); // Handle error
+                            }
+
+                            // Call the sendMessage function to trigger the chatbot
+                            sendMessage();
                         }
+
                     </script>
 
                     <div class="row">
