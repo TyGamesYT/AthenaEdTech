@@ -53,8 +53,6 @@ nav.navbar {
 .nav-link, a {
     color:blue;
     transition:color 0.2s
-    text-align:center;
-    
 }
 
 .nav-item {
@@ -62,7 +60,6 @@ nav.navbar {
     padding-right:5px;
     margin:5px;
     margin: auto;
-    
 }
 
 a.nav-link:hover, a:hover,a.navbar-brand:hover{
@@ -110,7 +107,7 @@ p {
     word-break: break-all;
 }
 
-#homeTitle, {
+#homeTitle {
     font-size:50px;
 }
 
