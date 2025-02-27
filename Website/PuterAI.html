@@ -14,10 +14,10 @@
         <script src="https://js.puter.com/v2/"></script> <!-- External Puter.js script -->
         <script src="SignIn.js" defer></script>
         <script src="StartupJava.js"></script>
-       
+    
+        <script src="AI.js"></script>
     </head>
     <body>
-        
         <div class="background"></div>
         
         <div class="container-fluid">
@@ -25,12 +25,12 @@
                 <div class="container-fluid">
                     <div class="navbar-brand">
                         <a href="https://brookfieldeast.elmbrookschools.org/"><img class="nav-pic" src="https://codehs.com/uploads/4f12cb64a2fcecd88a9b94adb4dd465b"></a>
-                        <a href="index.html" class="navbar-brand active">Home</a>
+                        <a href="index.html" class="navbar-brand">Home</a>
                     </div>
                     <ul class="navbar-nav">
-                        <li class="nav-item"><a href="AI.html" class="nav-link">AI</a></li>
+                        <li class="nav-item active"><a href="AI.html" class="nav-link">AI</a></li>
                         <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-                        <li  class="nav-item"><a href="account.html" id="account1"  onclick="SignIn()" class="nav-link">Sign In</a></li>
+                        <li class="nav-item"><a href="account.html" id="account2" onclick="SignIn()" class="nav-link">Sign In</a></li>
                         <div class="navbar-brand">
                             <a href="https://brookfieldeast.elmbrookschools.org/"><img class="nav-pic" src="https://codehs.com/uploads/de93c97be8e9a9f832c42a59ac7d1c46"></a>
                         </div>
@@ -38,14 +38,14 @@
                 </div>
             </nav>
             
-            <header class="Header" id="ID1">
+            <header class="Header">
                 <div class="container header">
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
-                            <h1 id="homeTitle" class="titleCont">Athena Edtech</h1>
+                            <h1 id="homeTitle" class="titleCont">Puter</h1>
                         </div>
                         <div class="col-md-6 col-sm-12">
-                            <p>Enhancing Our Education at Brookfield East With AI
+                            <p>This AI is from Puter, Athena did not make this AI but has it here as demonstration.
                             
                             </p>
                         </div>
@@ -53,45 +53,94 @@
                     </div>
                 </div>
             </header>
-            <!-- page stuff here -->
-            <main class="main" id="ID2">
-                <div class="container header">
+            
+            <main>
+                <div class="container">
+                    <script>
+                        async function Calculate() {
+                            if (typeof puter !== 'undefined' && puter.auth && puter.auth.isSignedIn) { 
+                                if (!puter.auth.isSignedIn()) {
+                                    document.getElementById("results").innerHTML = "Error-Request.Failed:Account Error";
+                                    puter.auth.signIn();
+                                    return;
+                                }
+                            }
+                    
+                            let usertext = document.querySelector('#userText').value;
+                            
+                            // Toggle grammar check
+                            // Toggle grammar check
+                            // Toggle grammar check
+                            let checkGrammarBool = false;
+                            // Toggle grammar check
+                            // Toggle grammar check
+                            // Toggle grammar check
+                    
+                            // Grammar Check Functionality (Runs Separately)
+                            async function handleGrammarCheck() {
+                                if (!usertext.trim()) {
+                                    alert("Please enter some text.");
+                                    return;
+                                }
+                    
+                                document.getElementById("results").innerHTML = "---Checking Grammar---";
+                    
+                                try {
+                                    const { correctedMessage, explanation } = await checkGrammar(usertext);
+                                    document.getElementById("results").innerHTML = correctedMessage + "<br>" + explanation;
+                                } catch (error) {
+                                    console.error("Grammar check error:", error);
+                                    document.getElementById("results").innerHTML = "Error in grammar check." + error;
+                                }
+                            }
+                    
+                            if (checkGrammarBool) {
+                                handleGrammarCheck();
+                                return; // STOP HERE! No chatbot if grammar check is active.
+                            }
+                    
+                            // --- Chatbot Functionality ---
+                            document.getElementById("results").innerHTML = "---Loading AI Response---";
+                    
+                            function onFulfilled(response) { 
+                                document.getElementById("results").innerHTML = response;
+                            }
+                    
+                            function onRejected(response) { 
+                                if (!puter.auth.isSignedIn()) {
+                                    document.getElementById("results").innerHTML = "Error-Request.Failed:Account Error";
+                                    puter.auth.signIn();
+                                } else {
+                                    document.getElementById("results").innerHTML = "Error-Request.Failed:Error has occurred";
+                                }
+                            }
+                    
+                            // Run chatbot request with ORIGINAL user input (uncorrected text)
+                            puter.ai.chat(usertext).then(onFulfilled, onRejected);
+                        }
+                    </script>
+
                     <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <h1 class="titleCont">Our Goals</h1>
-                            <ul>
-                                <li><p>Create An AI for Brookfield East</p></li>
-                                <li><p>Get Support From Teachers</p></li>
-                                <li><p>Implement Within Class Work</p></li>
-                            </ul>
+                        <label for="userText"> </label>
+                        <div class="input-div col-md-6 col-sm-12" >
+                        
+                            <textarea id="userText"  placeholder="Type a message..."></textarea> 
                         </div>
                         <div class="col-md-6 col-sm-12">
-                            <h1 class="titleCont">Our Mission </h1>
-                            <p>As a club we strive to improve our peer's education, we think that AI is the future of education and should be used at our school. </p>
+                            <button onclick='Calculate()'style="width:100%;">Send</button>
+                            <br>
+                            <p id="results">
+                                ---Results Here---
+                            </p>
                         </div>
-                        <hr class="solid">
-                    </div>
-                </div>    
-                <div class="container" id="ID3">
-                    <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        <h1 class="titleCont">Get Started With AI</h1>
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                        <p>Head to the AI page to try out our AI, this AI is specialized to our school and will provide our peers top of the line knowledge and be a great resource</p>
+                        
                     </div>
                 </div>
             </main>
-            
-            
-            
         </div>
-        <br>
-        <br>
-        <br>
         <footer>
-            <p class="footerP">Contact us at</p>
-            <p class="footerP">...@gmail.com</p>
+            <p class="footerP">From Puter</p>
+            <p class="footerP">https://js.puter.com/v2/</p>
             <p class="copyright">© Athena Edtech Brookfield East 2025</p>
         </footer>
     </body>
