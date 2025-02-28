@@ -82,7 +82,7 @@
                                     document.getElementById("results").innerHTML = "Error-Request.Failed: Account Error";
                                     puter.auth.signIn();
                                 } else {
-                                    document.getElementById("results").innerHTML = "Error-Request.Failed: Error has occurred";
+                                    document.getElementById("results").innerHTML = "Error-Request.Failed: Error has occurred" + error.message;
                                 }
                             }
 
@@ -90,16 +90,22 @@
                             function sendMessage() {
                                 let userText = document.getElementById("userText").value; // Use the correct ID for the text area input
 
-                                fetch("http://localhost:5000/chatbot", {
+                                fetch("http://127.0.0.1:5000/chatbot", {
                                     method: "POST",
                                     headers: {
                                         "Content-Type": "application/json"
                                     },
-                                    body: JSON.stringify({ message: userText })
+                                    body: JSON.stringify({ message: userText }),
+                                    credentials: 'same-origin'  // or 'include' for cross-origin
                                 })
                                 .then(response => response.json())
-                                .then(onFulfilled) // Handle response
-                                .catch(onRejected); // Handle error
+                                .then(data => {
+                                    document.getElementById("results").innerHTML = data.answer;
+                                })
+                                .catch(error => {
+                                    document.getElementById("results").innerHTML = "Error-Request.Failed: " + error.message;
+                                    //Failed to fetch means a problem with server
+                                });
                             }
 
                             // Call the sendMessage function to trigger the chatbot

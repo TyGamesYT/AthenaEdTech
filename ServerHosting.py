@@ -6,7 +6,11 @@ from sentence_transformers import SentenceTransformer
 import numpy as np
 
 # Initialize Flask
+from flask_cors import CORS
 app = Flask(__name__)
+
+# Enable CORS for all routes
+CORS(app)
 
 # Load trained components
 print("Loading chatbot models...")
@@ -76,11 +80,14 @@ def chatbot():
     data = request.get_json()
     user_input = data.get("message", "")
     
+    print(user_input)
+    
     if not user_input:
         return jsonify({"error": "No input provided"}), 400
     
     response = get_response(user_input)
     return jsonify({"answer": response})
+    print(response)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
