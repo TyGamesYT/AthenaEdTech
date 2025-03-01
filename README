@@ -4,5 +4,9 @@ In order for program to work, you need
     nn_model.pkl
     chatbot_data.pkl
 
+Run this command to install proper imports
+pip install flask joblib sentence-transformers numpy flask-cors
+
 The Other Files are not needed for RUNNING the program, only setting it up
 Training will take place localy and upload data specifically to chatbot_data.pkl, nn_model.pkl, sbert_model.pkl, and word_tranistions.pkl.
+
