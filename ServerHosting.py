@@ -113,7 +113,7 @@ def chatbot():
 @app.route("/")
 def home():
     """Serves the static index.html page"""
-    return send_from_directory('Website', 'index.html')
+    return send_from_directory('Website', 'Index.html')
 
 if __name__ == "__main__":
     # Use the port provided by Render or default to 10000
