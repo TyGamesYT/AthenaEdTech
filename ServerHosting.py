@@ -117,6 +117,7 @@ def home():
 
 @app.route("/<path:filename>")
 def serve_static(filename):
+    print(f"Serving static file: {filename}")
     """Serves static files like CSS, JS, and other HTML pages"""
     return send_from_directory("Website", filename)
 
