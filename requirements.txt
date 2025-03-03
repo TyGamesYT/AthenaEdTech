@@ -1,0 +1,7 @@
+Flask
+Flask-Cors
+joblib
+sentence-transformers
+numpy
+scikit-learn
+gunicorn
