@@ -5,6 +5,7 @@ import joblib
 import random
 from sentence_transformers import SentenceTransformer
 import numpy as np
+import psutil
 
 # Initialize Flask
 app = Flask(__name__)
@@ -41,11 +42,10 @@ def load_models():
 
     print("Models are loaded!")
 
-def add_to_memory(user_input, bot_response):
-    """Stores last 3 user-bot interactions"""
-    if len(session_memory) >= 6:
-        session_memory.pop(0)
-    session_memory.append({"user": user_input, "bot": bot_response})
+def log_memory_usage():
+    process = psutil.Process()
+    mem_info = process.memory_info().rss / 1024 / 1024  # Convert to MB
+    print(f"[RENDER] Memory Usage: {mem_info:.2f} MB")
 
 def generate_sentence(start_word, max_length=10):
     """Generates a response based on word transitions"""
@@ -68,14 +68,11 @@ def generate_sentence(start_word, max_length=10):
 
 def get_response(user_input):
     # Lazy load models if not loaded yet
+    print("---Loading Models---")
     load_models()
-    
-    context = ""
-    for entry in session_memory:
-        context += f"You: {entry['user']}\nBot: {entry['bot']}\n"
-    context += f"You: {user_input}\n"
+    print("---Models Loaded---")
 
-    user_input_vec = model.encode([context])
+    user_input_vec = model.encode([user_input])
     
     distances, idx = nn_model.kneighbors(user_input_vec)
     best_match_idx = idx[0][0]
@@ -92,11 +89,12 @@ def get_response(user_input):
         return generate_sentence(start_word)
     
     response = df["response"].iloc[best_match_idx]
-    add_to_memory(user_input, response)
     return response
 
 @app.route("/chatbot", methods=["POST"])
 def chatbot():
+    log_memory_usage()
+
     """Handles chatbot requests from the website"""
     data = request.get_json()
     user_input = data.get("message", "")
@@ -117,7 +115,6 @@ def home():
 
 @app.route("/<path:filename>")
 def serve_static(filename):
-    print(f"Serving static file: {filename}")
     """Serves static files like CSS, JS, and other HTML pages"""
     return send_from_directory("Website", filename)
 
