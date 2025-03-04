@@ -96,16 +96,22 @@
                                         "Content-Type": "application/json"
                                     },
                                     body: JSON.stringify({ message: userText }),
-                                    credentials: 'same-origin'  // or 'include' for cross-origin
+                                    credentials: 'same-origin'
                                 })
-                                .then(response => response.json())
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error(`HTTP error! Status: ${response.status}`);
+                                    }
+                                    return response.json(); // This will still fail if response is empty
+                                })
                                 .then(data => {
-                                    document.getElementById("results").innerHTML = data.answer;
+                                    console.log("Chatbot response:", data);
                                 })
                                 .catch(error => {
-                                    document.getElementById("results").innerHTML = "Error-Request.Failed: " + error.message;
-                                    //Failed to fetch means a problem with server
+                                    console.error("Error:", error);
+                                    alert("There was an issue connecting to the chatbot. Please try again.");
                                 });
+
                             }
 
                             // Call the sendMessage function to trigger the chatbot
