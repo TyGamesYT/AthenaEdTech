@@ -42,11 +42,6 @@ def load_models():
 
     print("Models are loaded!")
 
-def log_memory_usage():
-    process = psutil.Process()
-    mem_info = process.memory_info().rss / 1024 / 1024  # Convert to MB
-    print(f"[RENDER] Memory Usage: {mem_info:.2f} MB")
-
 def generate_sentence(start_word, max_length=10):
     """Generates a response based on word transitions"""
     sentence = [start_word]
@@ -93,8 +88,6 @@ def get_response(user_input):
 
 @app.route("/chatbot", methods=["POST"])
 def chatbot():
-    log_memory_usage()
-
     """Handles chatbot requests from the website"""
     data = request.get_json()
     user_input = data.get("message", "")

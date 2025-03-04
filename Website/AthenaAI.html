@@ -109,7 +109,7 @@
                                 })
                                 .catch(error => {
                                     console.error("Error:", error);
-                                    alert("There was an issue connecting to the chatbot. Please try again.");
+                                    document.getElementById("results").innerHTML = "Error-Request.Failed: Error has occurred" + error.message;
                                 });
 
                             }
