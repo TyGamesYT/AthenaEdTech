@@ -111,6 +111,8 @@ def serve_static(filename):
     """Serves static files like CSS, JS, and other HTML pages"""
     return send_from_directory("Website", filename)
 
+load_models()
+
 if __name__ == "__main__":
     # Use the port provided by Render or default to 10000
     port = int(os.environ.get("PORT", 10000))
