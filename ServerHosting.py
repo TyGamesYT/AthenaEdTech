@@ -98,6 +98,7 @@ def chatbot():
         return jsonify({"error": "No input provided"}), 400
     
     response = get_response(user_input)
+    print(response)
     return jsonify({"answer": response})
 
 # Serve static website (index.html)
