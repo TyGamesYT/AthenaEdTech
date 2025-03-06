@@ -63,9 +63,7 @@ def generate_sentence(start_word, max_length=10):
 
 def get_response(user_input):
     # Lazy load models if not loaded yet
-    print("---Loading Models---")
     load_models()
-    print("---Models Loaded---")
 
     user_input_vec = model.encode([user_input])
     

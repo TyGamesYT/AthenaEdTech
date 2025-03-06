@@ -64,39 +64,42 @@
                             }
 
                             let usertext = document.querySelector('#userText').value;
-
                             document.getElementById("results").innerHTML = "---Loading AI Response---";
 
-                            async function sendMessage() {
-                                let userText = document.getElementById("userText").value;
+                            function onFulfilled(data) {
+                                document.getElementById("results").innerHTML = data.reply || "Error: No response received";
+                            }
 
-                                try {
-                                    let response = await fetch("https://athenaedtech.onrender.com/chatbot", {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json"
-                                        },
-                                        body: JSON.stringify({ message: userText }),
-                                        credentials: 'same-origin'
-                                    });
+                            function onRejected(error) {
+                                console.error("Error:", error);
+                                document.getElementById("results").innerHTML = "Error-Request.Failed: " + error.message;
+                            }
 
+                            function sendMessage() {
+                                return fetch("https://athenaedtech.onrender.com/chatbot", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify({ message: usertext }),
+                                    credentials: 'same-origin'
+                                })
+                                .then(response => {
                                     if (!response.ok) {
                                         throw new Error(`HTTP error! Status: ${response.status}`);
                                     }
-
-                                    let data = await response.json();
+                                    return response.json();
+                                })
+                                .then(data => {
                                     console.log("Chatbot response:", data);
-
-                                    document.getElementById("results").innerHTML = data.reply || "Error: No response received";
-
-                                } catch (error) {
-                                    console.error("Error:", error);
-                                    document.getElementById("results").innerHTML = "Error-Request.Failed: " + error.message;
-                                }
+                                    return data;
+                                });
                             }
 
-                            await sendMessage();
+                            sendMessage().then(onFulfilled, onRejected);
                         }
+
+
                     </script>
 
                     <div class="row">
