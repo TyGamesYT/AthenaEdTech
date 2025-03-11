@@ -67,7 +67,7 @@
                             document.getElementById("results").innerHTML = "---Loading AI Response---";
 
                             function onFulfilled(data) {
-                                document.getElementById("results").innerHTML = data.reply || "Error: No response received";
+                                document.getElementById("results").innerHTML = data.answer || "Error: No response received";
                             }
 
                             function onRejected(error) {
