@@ -14,6 +14,7 @@
         <script src="https://js.puter.com/v2/"></script> <!-- External Puter.js script -->
         <script src="SignIn.js" defer></script>
         <script src="StartupJava.js"></script>
+        <script src="AI.js"></script>
     </head>
     <body>
         <div class="background"></div>
@@ -51,76 +52,277 @@
                     </div>
                 </div>
                 <div class="container">
-                    <div id="carouselExampleCaptions" class="carousel slide shadow-lg" data-bs-ride="carousel">
+                    <div id="carouselExampleCaptions" class="carousel slide shadow-lg" data-bs-ride="carousel" data-bs-interval="false" data-ride="carousel" data-pause="hover">
                         <div class="carousel-indicators">
                             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
                             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
                         </div>
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <a href="AthenaAI.html">
-                                    <div>
-                                        <img class="img" src="https://codehs.com/uploads/acb2b7c26cd1c036fef80d28da103990">
-                                        <div class="carousel-caption d-block">
-                                            <h6>Athena</h6>
-                                        </div>
+                            <div class="carousel-item active" id="one">
+                                <div>
+                                    <img class="img" src="https://codehs.com/uploads/acb2b7c26cd1c036fef80d28da103990">
+                                    <div class="carousel-caption d-block">
+                                        <h6>Athena</h6>
                                     </div>
-                                </a>
+                                </div>
                             </div>
-                            <div class="carousel-item">
-                                <a href="PuterAI.html">
-                                    <div>
-                                        <img class="img" src="https://codehs.com/uploads/9a3f88a2481fbc01f68aa7a8e0e380c0">
-                                        <div class="carousel-caption d-block">
-                                            <h6>Puter</h6>
-                                        </div>
+                            <div class="carousel-item" id="two">
+                                <div>
+                                    <img class="img" src="https://codehs.com/uploads/9a3f88a2481fbc01f68aa7a8e0e380c0">
+                                    <div class="carousel-caption d-block">
+                                        <h6>Puter</h6>
                                     </div>
-                                </a>
+                                </div>
                             </div>
-                            <div class="carousel-item">
-                                <a href="GrammarCheckerAI.html">
-                                    <div>
-                                        <img class="img" src="https://codehs.com/uploads/463f5712c87b36effbe22ef9aaede4fb">
-                                        <div class="carousel-caption d-block">
-                                            <h6>Grammar Checker</h6>
-                                        </div>
+                            <div class="carousel-item" id="three">
+                                <div>
+                                    <img class="img" src="https://codehs.com/uploads/463f5712c87b36effbe22ef9aaede4fb">
+                                    <div class="carousel-caption d-block">
+                                        <h6>Grammar Checker</h6>
                                     </div>
-                                </a>
+                                </div>
                             </div>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" onclick="changeContentBasedOnActiveSlide()" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Previous</span>
                         </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" onclick="changeContentBasedOnActiveSlide()" data-bs-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="visually-hidden">Next</span>
                         </button>
                     </div>
                 </div>
             </header>
-            
-            <main>
-                <div class="container">
-                    <h1>Format:</h1>
-                    <h6>To Use AI Please Select One Above</h6>
+            <div id="divOne">
+                <div class="container header">
                     <div class="row">
-                        <label for="userText"> </label>
-                        <div class="input-div col-md-6 col-sm-12" >
-                            <textarea id="userText"  disabled placeholder="Type a message... /n /n To use AI please ">Enter Your Prompt Here...</textarea> 
+                        <div class="col-md-6 col-sm-12">
+                            <h1 id="homeTitle" class="titleCont">Athena</h1>
                         </div>
                         <div class="col-md-6 col-sm-12">
-                            <button style="width:100%;">Send</button>
+                            <p>This an AI is from Athena Edtech, Athena did make this AI and has trained it.</p>
+                        </div>
+                        <hr class="solid">
+                    </div>
+                </div>
+                <div class="container">
+                    <script>
+                        async function Calculate1() {
+                            let usertext = document.querySelector('#userText1').value;
+                            document.getElementById("results1").innerHTML = "---Loading AI Response---";
+
+                            function onFulfilled(data) {
+                                document.getElementById("results1").innerHTML = data.answer || "Error: No response received";
+                            }
+
+                            function onRejected(error) {
+                                console.error("Error:", error);
+                                document.getElementById("results1").innerHTML = "Error-Request.Failed: " + error.message;
+                            }
+
+                            function sendMessage() {
+                                return fetch("https://athenaedtech.onrender.com/chatbot", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify({ message: usertext }),
+                                    credentials: 'same-origin'
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error(`HTTP error! Status: ${response.status}`);
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log("Chatbot response:", data);
+                                    return data;
+                                });
+                            }
+
+                            sendMessage().then(onFulfilled, onRejected);
+                        }
+
+
+                    </script>
+                    <div class="row">
+                        <label for="userText1"> </label>
+                        <div class="input-div col-md-6 col-sm-12">
+                            <textarea id="userText1" placeholder="Type a message..."></textarea> 
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <button onclick='Calculate1()' style="width:100%;">Send</button>
                             <br>
-                            <p id="results">
-                                ---Response After Clicking Button---
+                            <p id="results1">---Results Here---</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+              
+            <div id="divTwo">
+                <div class="container header">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <h1 id="homeTitle" class="titleCont">Puter</h1>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <p>This AI is from Puter, Athena did not make this AI but has it here as demonstration.
+                            
+                            </p>
+                        </div>
+                        <hr class="solid">
+                    </div>
+                </div>
+                <div class="container">
+                    <script>
+                        async function Calculate2() {
+                            if (typeof puter !== 'undefined' && puter.auth && puter.auth.isSignedIn) { 
+                                if (!puter.auth.isSignedIn()) {
+                                    document.getElementById("results").innerHTML = "Error-Request.Failed:Account Error";
+                                    puter.auth.signIn();
+                                    return;
+                                }
+                            }
+                    
+                            let usertext = document.querySelector('#userText2').value;
+                    
+                            // --- Chatbot Functionality ---
+                            document.getElementById("results2").innerHTML = "---Loading AI Response---";
+                    
+                            function onFulfilled(response) { 
+                                document.getElementById("results2").innerHTML = response;
+                            }
+                    
+                            function onRejected(response) { 
+                                if (!puter.auth.isSignedIn()) {
+                                    document.getElementById("results2").innerHTML = "Error-Request.Failed:Account Error";
+                                    puter.auth.signIn();
+                                } else {
+                                    document.getElementById("results2").innerHTML = "Error-Request.Failed:Error has occurred";
+                                }
+                            }
+                    
+                            // Run chatbot request with ORIGINAL user input (uncorrected text)
+                            puter.ai.chat(usertext).then(onFulfilled, onRejected);
+                        }
+                    </script>
+
+                    <div class="row">
+                        <label for="userText2"> </label>
+                        <div class="input-div col-md-6 col-sm-12" >
+                        
+                            <textarea id="userText2"  placeholder="Type a message..."></textarea> 
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <button onclick='Calculate2()'style="width:100%;">Send</button>
+                            <br>
+                            <p id="results2">
+                                ---Results Here---
                             </p>
                         </div>
                         
                     </div>
                 </div>
-            </main>
+            </div>
+            <div id="divThree">
+                <div class="container header">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <h1 id="homeTitle" class="titleCont">Grammar Check</h1>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <p>This AI is from Athena and puter, Athena did not fully make this AI but has it is a mix of both. Please enter the text you want checked.
+                            
+                            </p>
+                        </div>
+                        <hr class="solid">
+                    </div>
+                </div>
+                <div class="container">
+                    <script>
+                        async function Calculate3() {
+                            if (typeof puter !== 'undefined' && puter.auth && puter.auth.isSignedIn) { 
+                                if (!puter.auth.isSignedIn()) {
+                                    document.getElementById("results").innerHTML = "Error-Request.Failed:Account Error";
+                                    puter.auth.signIn();
+                                    return;
+                                }
+                            }
+                    
+                            let usertext = document.querySelector('#userText3').value;
+                            
+                            // Toggle grammar check
+                            // Toggle grammar check
+                            // Toggle grammar check
+                            let checkGrammarBool = true;
+                            // Toggle grammar check
+                            // Toggle grammar check
+                            // Toggle grammar check
+                    
+                            // Grammar Check Functionality (Runs Separately)
+                            async function handleGrammarCheck() {
+                                if (!usertext.trim()) {
+                                    alert("Please enter some text.");
+                                    return;
+                                }
+                    
+                                document.getElementById("results3").innerHTML = "---Checking Grammar---";
+                    
+                                try {
+                                    const { correctedMessage, explanation } = await checkGrammar(usertext);
+                                    document.getElementById("results3").innerHTML = correctedMessage + "<br>" + explanation;
+                                } catch (error) {
+                                    console.error("Grammar check error:", error);
+                                    document.getElementById("results3").innerHTML = "Error in grammar check." + error;
+                                }
+                            }
+                    
+                            if (checkGrammarBool) {
+                                handleGrammarCheck();
+                                return; // STOP HERE! No chatbot if grammar check is active.
+                            }
+                    
+                            // --- Chatbot Functionality ---
+                            document.getElementById("results3").innerHTML = "---Loading AI Response---";
+                    
+                            function onFulfilled(response) { 
+                                document.getElementById("results3").innerHTML = response;
+                            }
+                    
+                            function onRejected(response) { 
+                                if (!puter.auth.isSignedIn()) {
+                                    document.getElementById("results3").innerHTML = "Error-Request.Failed:Account Error";
+                                    puter.auth.signIn();
+                                } else {
+                                    document.getElementById("results3").innerHTML = "Error-Request.Failed:Error has occurred";
+                                }
+                            }
+                    
+                            // Run chatbot request with ORIGINAL user input (uncorrected text)
+                            puter.ai.chat(usertext).then(onFulfilled, onRejected);
+                        }
+                    </script>
+
+                    <div class="row">
+                        <label for="userText3"> </label>
+                        <div class="input-div col-md-6 col-sm-12" >
+                        
+                            <textarea id="userText3"  placeholder="Type a message..."></textarea> 
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <button onclick='Calculate3()'style="width:100%;">Send</button>
+                            <br>
+                            <p id="results3">
+                                ---Results Here---
+                            </p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
         </div>
         <footer>
             <p class="footerP">From Puter</p>
